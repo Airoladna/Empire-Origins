@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f2ec">
+<title>Kochfaul.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#ff5a1f;--orange2:#ff7a45;--green:#16884b;--ink:#181715;--muted:#78736d;--bg:#f7f2ec;--card:#fff;--line:#ebe4dc;--shadow:0 14px 38px rgba(45,32,20,.10);--r:24px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#ddd5cc;color:var(--ink);font-family:Inter,system-ui,sans-serif}
+body{display:flex;justify-content:center}
+button,input{font:inherit}
+button{border:0;cursor:pointer}
+.app{width:100%;min-height:100svh;background:var(--bg);overflow:hidden;position:relative}
+@media(min-width:700px){
+ body{padding:24px}
+ .app{width:390px;height:min(844px,calc(100vh - 48px));min-height:0;border:9px solid #171717;border-radius:48px;box-shadow:0 25px 80px #0005;overflow:hidden}
+}
+.screen{display:none;height:100%;min-height:100svh;overflow-y:auto;padding-bottom:100px;animation:in .32s ease}
+@media(min-width:700px){.screen{min-height:100%;height:100%}}
+.screen.active{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.status{height:34px;padding:10px 20px 0;display:flex;justify-content:space-between;font-size:12px;font-weight:700;position:sticky;top:0;z-index:10;background:linear-gradient(var(--bg) 75%,transparent)}
+.status .icons{letter-spacing:3px}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;margin:0;letter-spacing:-.04em}
+h1{font-size:46px;line-height:.94} h2{font-size:30px;line-height:1.02} h3{font-size:19px}
+p{line-height:1.45}.pad{padding:22px 20px}.muted{color:var(--muted)}
+.logo{font:800 29px "Bricolage Grotesque";letter-spacing:-.06em}
+.logo span{color:var(--orange)}
+.primary{width:100%;background:var(--orange);color:#fff;padding:17px 20px;border-radius:18px;font-weight:800;font-size:16px;box-shadow:0 9px 22px #ff5a1f35;transition:.2s}
+.primary:active{transform:scale(.97)}
+.ghost{background:#f1ece6;padding:12px 15px;border-radius:14px;font-weight:700}
+.intro{display:flex;flex-direction:column;min-height:100%;padding:18px 20px 24px}
+.intro .logo{margin-top:4px}
+.collage{height:330px;position:relative;margin:16px 0 20px}
+.foodphoto{position:absolute;width:69%;height:235px;border-radius:28px;box-shadow:0 16px 30px #3b25172b;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.foodphoto:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,#fff6 0 8%,transparent 9%),radial-gradient(circle at 65% 65%,#0002 0 10%,transparent 11%)}
+.foodphoto .emoji{font-size:90px;filter:drop-shadow(0 8px 8px #0002)}
+.foodphoto.a{left:0;top:28px;transform:rotate(-8deg);background:linear-gradient(135deg,#e88942,#f6cf8b)}
+.foodphoto.b{right:0;top:0;transform:rotate(7deg);background:linear-gradient(135deg,#72a85c,#d9e6a5)}
+.foodphoto.c{left:55px;bottom:0;transform:rotate(2deg);background:linear-gradient(135deg,#db6550,#f3b278)}
+.tag{position:absolute;background:#fff;padding:8px 11px;border-radius:12px;font-size:11px;font-weight:800;box-shadow:0 6px 16px #0002;z-index:2}
+.t1{left:6px;top:12px}.t2{right:4px;top:118px}.t3{right:18px;bottom:17px}
+.intro .copy{margin-top:auto}.intro h1{margin:12px 0}.intro p{font-size:15px;color:#5e5851;margin:0 0 20px}
+.question{margin-top:24px}.question-title{font-size:15px;font-weight:800;margin-bottom:11px}
+.market-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.market{height:57px;border-radius:15px;background:#fff;border:2px solid transparent;position:relative;font-weight:800;font-size:12px;box-shadow:0 3px 10px #0000000a}
+.market.selected{border-color:var(--orange)}
+.market .check{display:none;position:absolute;right:5px;top:4px;width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;font-size:11px}
+.market.selected .check{display:grid;place-items:center}
+.m-lidl{color:#0050aa}.m-aldi{color:#0050aa}.m-rewe{color:#e51c23}.m-edeka{color:#007a42}.m-kauf{color:#e30613}.m-penny{color:#d91626}.m-netto{color:#f3a000}.m-norma{color:#c4161c}
+.budgetbox{display:flex;align-items:end;justify-content:space-between}.amount{font:800 42px "Bricolage Grotesque";letter-spacing:-.05em}
+.slider{width:100%;accent-color:var(--orange);margin:12px 0 4px}
+.range-row{display:flex;justify-content:space-between;font-size:11px;color:#999}
+.permeal{font-size:12px;color:var(--muted);margin-top:7px}.permeal b{color:var(--green)}
+.lazy-card{text-align:center;background:#fff;border-radius:24px;padding:18px 14px;box-shadow:0 7px 22px #0000000b}
+.bigemoji{font-size:64px;height:74px;display:grid;place-items:center;transition:.2s}
+.bigemoji.jump{animation:jump .35s ease}@keyframes jump{50%{transform:translateY(-10px) scale(1.12)}}
+.lazy-title{font:800 21px "Bricolage Grotesque";margin:5px 0 10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.chip{background:#f2eee9;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:700;color:#5e5953}
+.lazy-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}
+.lazy-btn{background:#f2eee9;border-radius:14px;padding:10px 3px;font-size:23px}.lazy-btn.active{background:#fff0e9;outline:2px solid var(--orange)}
+.setup-footer{padding:24px 20px 30px}
+.loader{height:100%;min-height:100svh;display:grid;place-items:center;text-align:center;padding:30px}
+.loader .logo{font-size:38px}.orbit{width:180px;height:180px;border:2px dashed #ff5a1f44;border-radius:50%;position:relative;margin:20px auto}
+.orbit i{position:absolute;font-style:normal;font-size:30px;animation:orbit 2.4s linear infinite}
+.o1{left:73px;top:-19px}.o2{right:-16px;top:72px;animation-delay:.4s!important}.o3{left:12px;bottom:-12px;animation-delay:.8s!important}.o4{left:-16px;top:72px;animation-delay:1.2s!important}
+@keyframes orbit{to{transform:rotate(360deg) translateX(78px) rotate(-360deg)}}
+.loadsteps{text-align:left;max-width:310px;margin:auto}.loadstep{padding:11px 0;color:#aaa;font-size:12px;border-bottom:1px solid var(--line);transition:.3s}.loadstep.done{color:var(--ink);font-weight:700}.loadstep span{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#eee;margin-right:8px}.loadstep.done span{background:#dff4e8;color:var(--green)}
+.plan-head{padding:14px 20px 0}.darkbox{background:#1d1c1a;color:#fff;border-radius:25px;padding:20px;margin-top:14px;box-shadow:var(--shadow)}
+.total{display:flex;justify-content:space-between;align-items:end}.total strong{font:800 34px "Bricolage Grotesque";letter-spacing:-.05em}.total span{color:#b8b2aa;font-size:12px}
+.bar{height:9px;background:#ffffff18;border-radius:20px;overflow:hidden;margin:15px 0 9px}.bar>i{display:block;height:100%;background:#68d391;border-radius:20px;transition:.4s}
+.remaining{font-size:12px;color:#9ff0ba}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}.stat{background:#ffffff0d;border-radius:14px;padding:10px}.stat b{display:block;font:700 17px "Bricolage Grotesque"}.stat small{color:#aaa;font-size:9px}
+.cards{padding:14px 20px}.meal{background:#fff;border-radius:23px;overflow:hidden;margin-bottom:13px;box-shadow:0 7px 22px #0000000a}.meal-top{height:130px;position:relative;display:flex;align-items:center;justify-content:center}.meal-top .meal-emoji{font-size:72px;filter:drop-shadow(0 8px 8px #0003)}.day{position:absolute;left:12px;top:12px;background:#fff;padding:7px 9px;border-radius:10px;font-size:10px;font-weight:800}.pricepill{position:absolute;right:12px;top:12px;background:#1d1c1a;color:#fff;padding:7px 9px;border-radius:10px;font-size:10px;font-weight:800}.meal-body{padding:13px}.meal-body h3{margin-bottom:8px}.mealmeta{display:flex;justify-content:space-between;align-items:center}.mealmeta .chips{justify-content:flex-start}.swap{width:39px;height:39px;border-radius:13px;background:#fff0e9;color:var(--orange);font-size:20px;font-weight:800}.bottomnav{position:fixed;bottom:0;width:100%;max-width:390px;background:#fffdfbf2;backdrop-filter:blur(16px);border-top:1px solid #ddd6ce;padding:9px 10px calc(9px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);z-index:30}
+.navbtn{background:none;color:#aaa;font-size:10px;font-weight:700;display:flex;flex-direction:column;gap:4px;align-items:center}.navbtn b{font-size:21px;line-height:20px}.navbtn.active{color:var(--orange)}.badge{background:var(--orange);color:#fff;border-radius:99px;padding:2px 5px;font-size:8px;position:absolute;margin-left:17px;margin-top:-2px}
+.recipe-hero{height:275px;position:relative;display:flex;align-items:center;justify-content:center}.recipe-hero .heroemoji{font-size:125px}.back{position:absolute;left:16px;top:12px;background:#fff;color:#222;width:40px;height:40px;border-radius:14px;font-size:21px;z-index:3}.recipe-content{background:#fff;border-radius:30px 30px 0 0;margin-top:-24px;position:relative;padding:24px 20px 110px}.recipe-content h1{font-size:34px}.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:18px 0}.info{background:#f5f1ec;border-radius:14px;text-align:center;padding:10px 4px}.info b{display:block;font-size:14px}.info small{font-size:8px;color:#777}.ingredient{display:flex;justify-content:space-between;border-bottom:1px solid #eee7df;padding:11px 0;font-size:13px}.ingredient small{color:var(--muted)}.steps{counter-reset:step}.step{display:grid;grid-template-columns:32px 1fr;gap:10px;margin:16px 0}.stepnum{width:30px;height:30px;border-radius:10px;background:#fff0e9;color:var(--orange);font-weight:800;display:grid;place-items:center}.tip{font-size:11px;color:#8a837b;background:#f7f3ef;border-radius:10px;padding:8px;margin-top:7px}.fixedcook{position:fixed;bottom:0;left:0;right:0;max-width:390px;margin:auto;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:#fffdfbf5;backdrop-filter:blur(14px);z-index:25}
+.cook{background:#181715;color:#fff}.cook .status{background:linear-gradient(#181715 75%,transparent);color:#fff}.cook-inner{padding:25px 22px}.cookbar{height:6px;background:#ffffff18;border-radius:10px;margin:8px 0 32px}.cookbar i{display:block;height:100%;background:var(--orange);border-radius:10px;transition:.3s}.cook-step{font-size:12px;color:#999;font-weight:700}.cook-text{font:700 33px "Bricolage Grotesque";line-height:1.04;margin:12px 0 18px}.cook-tip{color:#bbb;font-size:13px;line-height:1.5}.timer{width:130px;height:130px;border:7px solid #ffffff18;border-top-color:var(--orange);border-radius:50%;display:grid;place-items:center;margin:38px auto 20px;font:800 29px "Bricolage Grotesque";animation:spin 1s linear infinite paused}.timer.running{animation-play-state:running}.timer.done{border-color:#68d391;color:#68d391;animation:none}.cook-actions{display:flex;gap:10px;margin-top:32px}.cook-actions button{flex:1}.confetti{font-size:60px;text-align:center;margin:35px 0 10px;animation:pop .5s ease}@keyframes pop{from{transform:scale(.2);opacity:0}to{transform:none;opacity:1}}
+.shop-head{padding:15px 20px}.shop-progress{background:#fff;border-radius:20px;padding:15px;box-shadow:0 5px 18px #0001}.shopline{display:flex;justify-content:space-between;font-weight:800;font-size:13px}.gang{margin-top:18px}.gang h3{font-size:15px;margin:0 0 8px}.shopitem{display:flex;align-items:center;gap:10px;background:#fff;padding:13px;border-bottom:1px solid #eee7df}.shopitem:first-of-type{border-radius:17px 17px 0 0}.shopitem:last-of-type{border-radius:0 0 17px 17px;border-bottom:0}.checkbox{width:23px;height:23px;border:2px solid #d8d1ca;border-radius:8px;display:grid;place-items:center;flex:none}.shopitem.done .checkbox{background:var(--green);border-color:var(--green);color:#fff}.shopitem.done .iname{text-decoration:line-through;color:#aaa}.iname{font-size:12px;font-weight:700;flex:1}.qty{font-size:11px;color:#777}.shopprice{font-size:11px;font-weight:700}.shop-total{margin:20px;background:#1d1c1a;color:#fff;border-radius:20px;padding:18px;display:flex;justify-content:space-between}.shop-note{font-size:11px;color:#777;text-align:center;padding:0 30px 25px}.profile{padding:20px}.profile-card{background:#fff;border-radius:23px;padding:20px;margin-top:14px}.setting{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #eee7df;font-size:13px}.setting:last-child{border:0}.toast{position:fixed;left:50%;bottom:88px;transform:translate(-50%,20px);background:#1d1c1a;color:#fff;padding:11px 16px;border-radius:14px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:80;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Kochfaul mobile polish */
+html { -webkit-text-size-adjust: 100%; }
+body { overscroll-behavior-y: none; }
+button, input { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.scroll-area { -webkit-overflow-scrolling: touch; }
+.swap-card { perspective: 900px; }
+.swap-card .meal-inner { transition: transform .34s cubic-bezier(.2,.8,.2,1), opacity .18s ease; transform-origin: center; }
+.swap-card.flipping .meal-inner { transform: rotateY(90deg); opacity: .15; }
+.timer-ring.done { animation: timerShake .55s ease-in-out 2; }
+@keyframes timerShake {
+  0%,100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-4px) rotate(-3deg); }
+  40% { transform: translateX(4px) rotate(3deg); }
+  60% { transform: translateX(-3px) rotate(-2deg); }
+  80% { transform: translateX(3px) rotate(2deg); }
+}
+
+</style>
+
+<meta name="theme-color" content="#ff5a1f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kochfaul.">
+
+</head>
+<body>
+<div class="app" id="app">
+  <section class="screen active" id="intro">
+    <div class="intro">
+      <div class="logo">Kochfaul<span>.</span></div>
+      <div class="collage">
+        <div class="foodphoto a"><span class="emoji">🍝</span></div>
+        <div class="foodphoto b"><span class="emoji">🌯</span></div>
+        <div class="foodphoto c"><span class="emoji">🍛</span></div>
+        <span class="tag t1">10 Min</span><span class="tag t2">1 Pfanne</span><span class="tag t3">2,40 €</span>
+      </div>
+      <div class="copy">
+        <h1>Kochen für Faule.</h1>
+        <p>Sag uns, wie faul du bist. Wir sagen dir, was du diese Woche isst und was du einkaufen musst.</p>
+        <button class="primary" onclick="go('setup');tick()">Los geht's</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="setup">
+    <div class="status"><span id="clock">20:44</span><span class="icons">●●●</span></div>
+    <div class="pad"><div class="logo">Kochfaul<span>.</span></div><h2 style="margin-top:20px">3 Fragen.<br>Dann wird gegessen.</h2>
+      <div class="question"><div class="question-title">1 · Wo kaufst du ein?</div>
+        <div class="market-grid" id="markets"></div>
+      </div>
+      <div class="question"><div class="question-title">2 · Budget pro Woche</div>
+        <div class="budgetbox"><span class="amount" id="budgetVal">30 €</span><span class="muted" style="font-size:11px">für 5 Abendessen</span></div>
+        <input class="slider" id="budget" type="range" min="10" max="60" value="30" oninput="updateBudget(this.value)">
+        <div class="range-row"><span>10 €</span><span>60 €</span></div>
+        <div class="permeal">≈ <b id="perMeal">6,00 €</b> pro Essen</div>
+      </div>
+      <div class="question"><div class="question-title">3 · Wie faul bist du?</div>
+        <div class="lazy-card"><div class="bigemoji" id="bigEmoji">🫠</div><div class="lazy-title" id="lazyTitle"></div><div class="chips" id="lazyChips"></div></div>
+        <div class="lazy-buttons" id="lazyButtons"></div>
+      </div>
+    </div>
+    <div class="setup-footer"><button class="primary" onclick="makePlan()">Meine Woche planen</button></div>
+  </section>
+
+  <section class="screen" id="loading">
+    <div class="loader"><div>
+      <div class="logo">Kochfaul<span>.</span></div>
+      <div class="orbit"><i class="o1">🍅</i><i class="o2">🥦</i><i class="o3">🍝</i><i class="o4">🧄</i></div>
+      <h2>Wir schieben die Arbeit<br>auf andere.</h2>
+      <div class="loadsteps" id="loadsteps"></div>
+    </div></div>
+  </section>
+
+  <section class="screen" id="week">
+    <div class="status"><span id="clock2">20:44</span><span class="icons">●●●</span></div>
+    <div class="plan-head"><div class="logo">Kochfaul<span>.</span></div>
+      <div class="darkbox"><div class="total"><div><small style="color:#aaa">Wochensumme</small><br><strong id="sumText">0,00 € / 30 €</strong></div><span id="leftText">0,00 € übrig</span></div>
+        <div class="bar"><i id="sumBar"></i></div><div class="remaining" id="snackText"></div>
+        <div class="stats"><div class="stat"><b id="avgTime">0 Min</b><small>Ø KOCHZEIT</small></div><div class="stat"><b id="ingCount">0</b><small>ZUTATEN</small></div><div class="stat"><b id="avgPrice">0,00 €</b><small>PREIS / ESSEN</small></div></div>
+      </div>
+    </div>
+    <div class="cards" id="mealCards"></div>
+    <div id="navWeek"></div>
+  </section>
+
+  <section class="screen" id="recipe"><div id="recipeContent"></div></section>
+  <section class="screen cook" id="cook"><div id="cookContent"></div></section>
+  <section class="screen" id="shopping">
+    <div class="status"><span id="clock3">20:44</span><span class="icons">●●●</span></div>
+    <div class="shop-head"><div class="logo">Kochfaul<span>.</span></div><h2 style="margin-top:18px">Einkauf.<br>Einmal durch, fertig.</h2>
+      <div class="shop-progress" style="margin-top:17px"><div class="shopline"><span id="shopProgress">0/0</span><span id="shopPct">0%</span></div><div class="bar" style="margin-bottom:0;background:#eee"><i id="shopBar"></i></div></div>
+    </div>
+    <div id="shoppingList" class="pad" style="padding-top:0"></div>
+    <div class="shop-total"><span>Gesamt</span><strong id="shopTotal">0,00 €</strong></div>
+    <div class="shop-note">Salz, Pfeffer und Öl hast du hoffentlich. Wenn nicht: Wir müssen reden.</div>
+    <div id="navShop"></div>
+  </section>
+  <section class="screen" id="profile">
+    <div class="status"><span id="clock4">20:44</span><span class="icons">●●●</span></div>
+    <div class="profile"><div class="logo">Kochfaul<span>.</span></div><h2 style="margin-top:20px">Dein Profil.<br>Eigentlich nur du.</h2>
+      <div class="profile-card"><div class="setting"><span>Supermarkt</span><b id="profileMarket">Lidl</b></div><div class="setting"><span>Wochenbudget</span><b id="profileBudget">30 €</b></div><div class="setting"><span>Faulheitsstufe</span><b id="profileLazy">🫠</b></div></div>
+      <div class="profile-card"><button class="primary" onclick="go('setup')">Plan neu machen</button></div>
+    </div><div id="navProfile"></div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const markets=[
+ {n:"Lidl",f:1},{n:"Aldi",f:1},{n:"Rewe",f:1.16},{n:"Edeka",f:1.18},
+ {n:"Kaufland",f:1.04},{n:"Penny",f:1},{n:"Netto",f:1},{n:"Norma",f:1}
+];
+const lazy=[
+ {e:"🫠",t:"Ich kann Wasser kochen",c:["max. 10 Min","1 Topf","0 Schneiden"]},
+ {e:"😮‍💨",t:"Nudeln krieg ich hin",c:["max. 15 Min","1 Topf oder Pfanne"]},
+ {e:"🙂",t:"Ich hab 'ne Pfanne",c:["max. 20 Min","bisschen Schneiden"]},
+ {e:"😎",t:"Ich hab sogar 'ne Knoblauchpresse",c:["max. 30 Min","Ofen erlaubt"]}
+];
+const recipes=[
+{id:1,n:"Pesto-Pasta mit Kirschtomaten",time:10,device:"1 Topf",l:0,kcal:610,protein:18,e:"🍝",g:"linear-gradient(135deg,#e99b50,#f6d18e)",ings:[["Spaghetti","500 g",.99,"Nudeln/Reis & Co"],["Pesto","190 g",1.49,"Nudeln/Reis & Co"],["Kirschtomaten","250 g",1.49,"Obst & Gemüse"],["Parmesan","40 g",.89,"Kühlregal"]],steps:[["Wasser aufsetzen und salzen.","Ja, ordentlich Salz. Das Wasser soll schmecken wie das Meer.",null],["Spaghetti kochen.","Nicht totkochen. Bissfest ist hier kein Charaktertest.",480],["Abgießen, Pesto und Tomaten unterheben.","Parmesan drauf. Fertig. Du bist offiziell Koch.",null]]},
+{id:2,n:"Instant-Ramen mit Wachsei",time:9,device:"1 Topf",l:0,kcal:520,protein:19,e:"🍜",g:"linear-gradient(135deg,#e9b64e,#f7e0a0)",ings:[["Instant-Ramen","2 Packungen",1.58,"Nudeln/Reis & Co"],["Eier","4 Stück",1.29,"Kühlregal"],["Frühlingszwiebeln","1 Bund",.89,"Obst & Gemüse"]],steps:[["Wasser kochen und Ramen hineingeben.","Der Wasserkocher darf heute MVP sein.",null],["Eier vorsichtig ins Wasser geben.","4 Minuten für ein schön wachsiges Eigelb.",240],["Ramen anrichten und Frühlingszwiebeln drauf.","Sieht aus wie Take-away. War aber billiger.",null]]},
+{id:3,n:"Falafel-Wrap mit Tzatziki",time:10,device:"1 Pfanne",l:0,kcal:590,protein:20,e:"🌯",g:"linear-gradient(135deg,#82a95d,#d9e7a7)",ings:[["Wraps","4 Stück",1.49,"Brot & Backwaren"],["Falafel","200 g",1.99,"Kühlregal"],["Tzatziki","200 g",1.19,"Kühlregal"],["Gurke","1 Stück",.79,"Obst & Gemüse"],["Salat","1 Kopf",1.19,"Obst & Gemüse"]],steps:[["Falafel in der Pfanne erwärmen.","Wenden. Mehr Kochkunst braucht es nicht.",300],["Gurke und Salat grob schneiden.","Grob ist eine legitime Schnitttechnik.",null],["Wraps mit allem füllen und rollen.","Nicht überladen. Sonst kommt der Falafel-Regen.",null]]},
+{id:4,n:"Kichererbsen-Feta-Salat",time:8,device:"1 Schüssel",l:0,kcal:470,protein:21,e:"🥗",g:"linear-gradient(135deg,#75a86d,#dbe7a2)",ings:[["Kichererbsen","1 Dose",.89,"Nudeln/Reis & Co"],["Feta","200 g",1.79,"Kühlregal"],["Tomaten","250 g",1.19,"Obst & Gemüse"],["Gurke","1 Stück",.79,"Obst & Gemüse"],["Zitrone","1 Stück",.49,"Obst & Gemüse"]],steps:[["Kichererbsen abgießen.","Dosenwasser weg. Wir wollen Salat, keine Suppe.",null],["Tomaten, Gurke und Zitrone schneiden.","Bisschen Schnippeln. Das zählt als Sport.",null],["Alles mit Feta mischen.","Zitrone drüber, fertig.",null]]},
+{id:5,n:"Caprese mit Ciabatta",time:7,device:"1 Brett",l:0,kcal:530,protein:24,e:"🍅",g:"linear-gradient(135deg,#d75b4f,#f5b276)",ings:[["Mozzarella","250 g",1.79,"Kühlregal"],["Tomaten","400 g",1.59,"Obst & Gemüse"],["Ciabatta","1 Stück",1.29,"Brot & Backwaren"],["Basilikum","1 Topf",1.29,"Obst & Gemüse"]],steps:[["Tomaten und Mozzarella schneiden.","Dicke Scheiben. Wir sind nicht bei der Geometrieprüfung.",null],["Abwechselnd auf einen Teller legen.","Basilikum dazwischen. Sieht sofort nach mehr aus.",null],["Mit Öl, Salz und Pfeffer toppen.","Mehr braucht's nicht.",null]]},
+{id:6,n:"Teriyaki-Hähnchen mit Reis",time:15,device:"1 Pfanne",l:1,kcal:690,protein:42,e:"🍗",g:"linear-gradient(135deg,#b96d39,#e9bf78)",ings:[["Hähnchenbrust","400 g",4.49,"Fleisch & Fisch"],["Express-Reis","250 g",1.69,"Nudeln/Reis & Co"],["Teriyaki-Sauce","150 ml",1.59,"Nudeln/Reis & Co"],["TK-Brokkoli","300 g",1.29,"Tiefkühl"]],steps:[["Hähnchen klein schneiden und anbraten.","Express-Reis ist kein Schummeln. Okay, ein bisschen.",360],["Brokkoli und Teriyaki-Sauce dazu.","Deckel drauf und kurz schmoren.",300],["Reis erwärmen und alles zusammenwerfen.","24 g Protein ohne Herd. Gym-Bros hassen diesen Trick.",null]]},
+{id:7,n:"Gebratener Reis mit Gemüse & Ei",time:14,device:"1 Pfanne",l:1,kcal:610,protein:24,e:"🍳",g:"linear-gradient(135deg,#d5a642,#f1e4a5)",ings:[["Express-Reis","250 g",1.69,"Nudeln/Reis & Co"],["TK-Wok-Gemüse","450 g",1.79,"Tiefkühl"],["Eier","4 Stück",1.29,"Kühlregal"],["Sojasauce","150 ml",.99,"Nudeln/Reis & Co"]],steps:[["Wok-Gemüse heiß anbraten.","Hohe Hitze. Die Pfanne darf kurz ihre Meinung sagen.",360],["Reis dazugeben und knusprig braten.","Nicht dauernd rühren.",240],["Eier hineinschlagen und stocken lassen.","Sojasauce dazu. Fertig.",120]]},
+{id:8,n:"Knoblauch-Garnelen-Linguine",time:15,device:"1 Pfanne",l:1,kcal:630,protein:31,e:"🍤",g:"linear-gradient(135deg,#e98b62,#f7d1a1)",ings:[["Linguine","500 g",1.29,"Nudeln/Reis & Co"],["TK-Garnelen","250 g",3.49,"Tiefkühl"],["Knoblauch","1 Knolle",.79,"Obst & Gemüse"],["Zitrone","1 Stück",.49,"Obst & Gemüse"],["Parmesan","40 g",.89,"Kühlregal"]],steps:[["Linguine kochen.","Wasser salzen. Du kennst das Spiel.",480],["Garnelen und Knoblauch anbraten.","Knoblauch nicht verbrennen. Er ist empfindlich.",240],["Pasta und Zitrone dazu, Parmesan drüber.","Einmal durchschwenken. Fertig.",null]]},
+{id:9,n:"Cremige Hähnchen-Brokkoli-Penne",time:19,device:"1 Pfanne",l:2,kcal:760,protein:47,e:"🥦",g:"linear-gradient(135deg,#6d9d5c,#d9dc9b)",ings:[["Penne","500 g",.99,"Nudeln/Reis & Co"],["Hähnchenbrust","400 g",4.49,"Fleisch & Fisch"],["TK-Brokkoli","300 g",1.29,"Tiefkühl"],["Kochsahne","200 ml",.99,"Kühlregal"],["Parmesan","40 g",.89,"Kühlregal"]],steps:[["Hähnchen anbraten und würzen.","Goldbraun ist das Ziel, nicht Kohle.",420],["Penne und Brokkoli kochen.","Ein Topf reicht. Abgießen.",600],["Alles mit Sahne und Parmesan in die Pfanne.","Kurz cremig ziehen lassen.",180]]},
+{id:10,n:"Rindfleisch-Brokkoli-Pfanne",time:20,device:"1 Pfanne",l:2,kcal:650,protein:46,e:"🥩",g:"linear-gradient(135deg,#8f4f45,#e5a16c)",ings:[["Rinderstreifen","300 g",4.99,"Fleisch & Fisch"],["TK-Brokkoli","300 g",1.29,"Tiefkühl"],["Paprika","2 Stück",1.49,"Obst & Gemüse"],["Sojasauce","150 ml",.99,"Nudeln/Reis & Co"],["Express-Reis","250 g",1.69,"Nudeln/Reis & Co"]],steps:[["Rindfleisch scharf anbraten.","Kurz und heiß. Rind mag keine Langeweile.",240],["Paprika und Brokkoli dazu.","Biss behalten. Kein Gemüsebrei.",360],["Sojasauce und Reis dazugeben.","Alles 2 Minuten durchschwenken.",120]]},
+{id:11,n:"Grünes Thai-Curry",time:20,device:"1 Topf",l:2,kcal:690,protein:23,e:"🍛",g:"linear-gradient(135deg,#57936a,#b9d47e)",ings:[["Kokosmilch","400 ml",1.49,"Nudeln/Reis & Co"],["Thai-Currypaste","100 g",1.69,"Nudeln/Reis & Co"],["TK-Wok-Gemüse","450 g",1.79,"Tiefkühl"],["Tofu","200 g",1.79,"Kühlregal"],["Express-Reis","250 g",1.69,"Nudeln/Reis & Co"]],steps:[["Currypaste kurz anrösten.","Die Küche darf jetzt thailändisch riechen.",60],["Kokosmilch und Gemüse dazu.","Einmal aufkochen lassen.",300],["Tofu und Reis dazu.","5 Minuten köcheln. Dann essen.",300]]},
+{id:12,n:"Überbackene Enchiladas",time:28,device:"Ofen",l:3,kcal:780,protein:36,e:"🌮",g:"linear-gradient(135deg,#b9533d,#f0ad63)",ings:[["Tortilla-Wraps","6 Stück",1.49,"Brot & Backwaren"],["Kidneybohnen","1 Dose",.89,"Nudeln/Reis & Co"],["Mais","1 Dose",.89,"Nudeln/Reis & Co"],["Tomatensauce","500 ml",.99,"Nudeln/Reis & Co"],["Geriebener Käse","200 g",1.79,"Kühlregal"]],steps:[["Bohnen, Mais und Tomatensauce mischen.","Würzen. Mutig würzen.",null],["Wraps füllen und rollen.","Naht nach unten in die Form.",null],["Käse drauf und backen.","Bei 200 °C ca. 15 Minuten.",900]]},
+{id:13,n:"Patatas Bravas aus dem Ofen",time:30,device:"Ofen",l:3,kcal:720,protein:18,e:"🥔",g:"linear-gradient(135deg,#c9853f,#f3c77d)",ings:[["Kartoffeln","1 kg",1.49,"Obst & Gemüse"],["Paprika","2 Stück",1.49,"Obst & Gemüse"],["Aioli","200 ml",1.39,"Kühlregal"],["Tomatensauce","500 ml",.99,"Nudeln/Reis & Co"]],steps:[["Kartoffeln würfeln und würzen.","Je kleiner, desto knuspriger. Aber bitte nicht erbsengroß.",null],["Bei 220 °C in den Ofen.","25 Minuten. Einmal wenden.",1500],["Paprika und Sauce dazu servieren.","Aioli drauf. Jetzt ist Feierabend.",null]]}
+];
+
+let state={market:0,budget:30,lazy:0,plan:[],shopping:[],recipe:null,cook:null};
+const euro=n=>n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+function tick(freq=520,dur=.035){try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.frequency.value=freq;g.gain.value=.035;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur)}catch(e){}}
+function bell(){tick(880,.08);setTimeout(()=>tick(1320,.12),100)}
+function go(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.getElementById(id).scrollTop=0;
+ if(id==="week")renderWeek(); if(id==="shopping")renderShopping(); if(id==="profile")renderProfile();
+}
+function updateClock(){let d=new Date(),t=d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});document.querySelectorAll('[id^=clock]').forEach(x=>x.textContent=t)}
+setInterval(updateClock,1000);updateClock();
+function init(){
+ document.getElementById("markets").innerHTML=markets.map((m,i)=>`<button class="market m-${m.n.toLowerCase()}" onclick="selectMarket(${i})">${m.n}<span class="check">✓</span></button>`).join("");
+ document.getElementById("lazyButtons").innerHTML=lazy.map((x,i)=>`<button class="lazy-btn ${i===0?"active":""}" onclick="selectLazy(${i})">${x.e}</button>`).join("");
+ renderLazy();nav();
+}
+function selectMarket(i){state.market=i;document.querySelectorAll(".market").forEach((x,j)=>x.classList.toggle("selected",j===i));tick()}
+function updateBudget(v){state.budget=+v;document.getElementById("budgetVal").textContent=v+" €";document.getElementById("perMeal").textContent=euro(v/5)}
+function selectLazy(i){state.lazy=i;document.querySelectorAll(".lazy-btn").forEach((x,j)=>x.classList.toggle("active",j===i));renderLazy();tick()}
+function renderLazy(){let x=lazy[state.lazy],e=document.getElementById("bigEmoji");e.textContent=x.e;e.classList.remove("jump");void e.offsetWidth;e.classList.add("jump");document.getElementById("lazyTitle").textContent=x.t;document.getElementById("lazyChips").innerHTML=x.c.map(c=>`<span class="chip">${c}</span>`).join("")}
+function adjusted(r){return r.ings.reduce((s,x)=>s+x[2],0)*markets[state.market].f}
+function uniqueShop(plan){
+ const map=new Map();
+ plan.forEach(r=>r.ings.forEach(x=>{
+   let key=x[0].toLowerCase();
+   if(!map.has(key)) map.set(key,{name:x[0],qty:x[1],price:x[2]*markets[state.market].f,gang:x[3],count:1,done:false});
+   else map.get(key).count++;
+ }));
+ return [...map.values()];
+}
+function planCost(plan){return uniqueShop(plan).reduce((s,x)=>s+x.price,0)}
+function makePlan(){
+ go("loading"); const max=state.lazy;
+ let eligible=recipes.filter(r=>r.l<=max).sort((a,b)=>((b.l===max)-(a.l===max))||a.time-b.time);
+ let selected=[],used=new Set();
+ // Start with a varied spread, preferring the chosen level.
+ for(let i=0;i<eligible.length&&selected.length<5;i++){
+   let r=eligible[i]; if(!used.has(r.id)){selected.push(r);used.add(r.id)}
+ }
+ // Optimize by replacing expensive meals with unused cheaper eligible dishes until the deduplicated cart fits.
+ let guard=0;
+ while(planCost(selected)>state.budget && guard++<30){
+   let free=eligible.filter(r=>!used.has(r.id)).sort((a,b)=>planCost([a])-planCost([b]));
+   if(!free.length) break;
+   let expensive=selected.slice().sort((a,b)=>adjusted(b)-adjusted(a))[0], repl=free[0];
+   selected[selected.findIndex(r=>r.id===expensive.id)]=repl;used.delete(expensive.id);used.add(repl.id);
+ }
+ state.plan=selected;
+ const steps=[
+  `Gerichte, die es bei ${markets[state.market].n} gibt`,
+  `Unter ${state.budget} € für die ganze Woche`,
+  `Max. ${lazy[state.lazy].c[0].replace("max. ","")} Minuten, wenig Abwasch`,
+  "Einkaufsliste nach Gängen sortiert"
+ ];
+ const box=document.getElementById("loadsteps");box.innerHTML=steps.map((s,i)=>`<div class="loadstep" id="ls${i}"><span>✓</span>${s}</div>`).join("");
+ steps.forEach((_,i)=>setTimeout(()=>{document.getElementById("ls"+i).classList.add("done");tick(650+i*100)},350+i*480));
+ setTimeout(()=>{state.shopping=uniqueShop(state.plan);bell();go("week")},2650);
+}
+function totalCost(){return planCost(state.plan)}
+function renderWeek(){
+ let sum=totalCost(), pct=Math.min(100,sum/state.budget*100), left=Math.max(0,state.budget-sum), avg=Math.round(state.plan.reduce((s,r)=>s+r.time,0)/5), shops=uniqueShop(state.plan);
+ document.getElementById("sumText").textContent=`${euro(sum)} / ${euro(state.budget)}`;
+ document.getElementById("leftText").textContent=left>0?`${euro(left)} übrig`:"Budget geknackt";
+ document.getElementById("sumBar").style.width=pct+"%";
+ document.getElementById("snackText").textContent=left>0?`${euro(left)} übrig für Snacks`:"Kein Snack-Budget mehr. Tragisch.";
+ document.getElementById("avgTime").textContent=avg+" Min";
+ document.getElementById("ingCount").textContent=shops.length;
+ document.getElementById("avgPrice").textContent=euro(sum/5);
+ document.getElementById("mealCards").innerHTML=state.plan.map((r,i)=>`<article class="meal"><div class="meal-top" style="background:${r.g}"><button class="day" onclick="openRecipe(${r.id})">${["Montag","Dienstag","Mittwoch","Donnerstag","Freitag"][i]}</button><span class="pricepill">${euro(adjusted(r))}</span><span class="meal-emoji">${r.e}</span></div><div class="meal-body"><h3>${r.n}</h3><div class="mealmeta"><div class="chips"><span class="chip">⏱ ${r.time} Min</span><span class="chip">${r.device}</span></div><button class="swap" title="Tauschen" onclick="swapMeal(${i})">↻</button></div></div></article>`).join("");
+ nav();
+}
+function swapMeal(i){
+ let eligible=recipes.filter(r=>r.l<=state.lazy&&!state.plan.some(x=>x.id===r.id)).sort((a,b)=>planCost([a])-planCost([b]));
+ if(!eligible.length){toast("Alles Gute ist schon im Plan 😎");return}
+ let old=state.plan[i], candidate=eligible.find(r=>r.l===state.lazy)||eligible[0];
+ state.plan[i]=candidate; tick(430); renderWeek();toast(`${old.n} → ${candidate.n}`);
+}
+function openRecipe(id){state.recipe=recipes.find(r=>r.id===id);renderRecipe();go("recipe");tick()}
+function renderRecipe(){
+ let r=state.recipe;
+ document.getElementById("recipeContent").innerHTML=`<div class="recipe-hero" style="background:${r.g}"><button class="back" onclick="go('week')">‹</button><span class="heroemoji">${r.e}</span></div>
+ <div class="recipe-content"><div class="chips" style="justify-content:flex-start"><span class="chip">⏱ ${r.time} Min</span><span class="chip">${r.device}</span><span class="chip">Stufe ${r.l+1}</span></div>
+ <h1 style="margin-top:10px">${r.n}</h1><div class="info-grid"><div class="info"><b>${r.kcal}</b><small>KCAL</small></div><div class="info"><b>${r.protein} g</b><small>PROTEIN</small></div><div class="info"><b>${r.steps.length}</b><small>SCHRITTE</small></div><div class="info"><b>${r.device}</b><small>GERÄT</small></div></div>
+ <h3 style="margin-top:25px">Du brauchst</h3><div>${r.ings.map(x=>`<div class="ingredient"><span>${x[0]}</span><small>${x[1]}</small></div>`).join("")}</div>
+ <h3 style="margin-top:25px">So geht's</h3><div class="steps">${r.steps.map((s,i)=>`<div class="step"><div class="stepnum">${i+1}</div><div><b>${s[0]}</b><div class="tip">💡 ${s[1]}</div>${s[2]?`<small class="muted">⏱ ${Math.round(s[2]/60)} Min warten</small>`:""}</div></div>`).join("")}</div></div>
+ <div class="fixedcook"><button class="primary" onclick="startCook()">Kochmodus starten</button></div>`;
+}
+function startCook(){state.cook={r:state.recipe,i:0,remaining:0};renderCook();go("cook");tick()}
+function renderCook(){
+ let c=state.cook,r=c.r,s=r.steps[c.i],last=c.i===r.steps.length-1,pct=(c.i/r.steps.length)*100;
+ document.getElementById("cookContent").innerHTML=`<div class="status"><span>${document.getElementById("clock").textContent}</span><span class="icons">●●●</span></div><div class="cook-inner">
+ <div class="cookbar"><i style="width:${pct}%"></i></div><div class="cook-step">Schritt ${c.i+1} von ${r.steps.length}</div><div class="cook-text">${s[0]}</div><div class="cook-tip">💡 ${s[1]}</div>
+ ${s[2]?`<div class="timer ${c.remaining?"running":""}" id="timer" onclick="runTimer()">${c.remaining?formatTime(c.remaining):formatTime(s[2])}</div>`:"<div style='height:150px'></div>"}
+ <div class="cook-actions">${c.i>0?`<button class="ghost" onclick="prevCook()">Zurück</button>`:""}<button class="primary" onclick="${s[2]&&!c.timerDone?"nextCook()":"nextCook()"}">${last?"Fertig!":"Nächster Schritt →"}</button></div></div>`;
+ if(c.timerDone&&last) finishCook();
+}
+function formatTime(n){let m=Math.floor(n/60),s=n%60;return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`}
+function runTimer(){
+ let c=state.cook,r=c.r,s=r.steps[c.i]; if(c.remaining>0)return;
+ c.remaining=s[2];document.getElementById("timer").classList.add("running");tick(700);
+ c.interval=setInterval(()=>{c.remaining--;let el=document.getElementById("timer");if(el)el.textContent=formatTime(Math.max(0,c.remaining));if(c.remaining<=0){clearInterval(c.interval);c.timerDone=true;bell();document.getElementById("timer").classList.remove("running");document.getElementById("timer").classList.add("done");document.getElementById("timer").textContent="✓";}},1000);
+}
+function nextCook(){
+ let c=state.cook,r=c.r;if(r.steps[c.i][2]&&!c.timerDone){toast("Erst Timer laufen lassen. Du bist doch nicht SO faul.");return}
+ if(c.i<r.steps.length-1){clearInterval(c.interval);c.i++;c.remaining=0;c.timerDone=false;renderCook();tick()}else finishCook();
+}
+function prevCook(){clearInterval(state.cook.interval);state.cook.i--;state.cook.remaining=0;state.cook.timerDone=false;renderCook()}
+function finishCook(){document.getElementById("cookContent").innerHTML=`<div class="status"><span>${document.getElementById("clock").textContent}</span><span class="icons">●●●</span></div><div class="cook-inner" style="text-align:center"><div class="confetti">🎉</div><h1 style="font-size:43px">Du hast gekocht.<br>Selbst.</h1><p style="color:#aaa;margin-top:18px">Mama wäre stolz.</p><div style="height:40px"></div><button class="primary" onclick="go('week')">Zurück zur Woche</button></div>`;bell()}
+function renderShopping(){
+ let groups=["Obst & Gemüse","Brot & Backwaren","Kühlregal","Fleisch & Fisch","Tiefkühl","Nudeln/Reis & Co"];
+ state.shopping=uniqueShop(state.plan).map((x,i)=>{let old=state.shopping.find(y=>y.name===x.name);return old?{...x,done:old.done}:x});
+ let done=state.shopping.filter(x=>x.done).length,total=state.shopping.length,pct=total?done/total*100:0;
+ document.getElementById("shopProgress").textContent=`${done}/${total}`;document.getElementById("shopPct").textContent=Math.round(pct)+"%";document.getElementById("shopBar").style.width=pct+"%";document.getElementById("shopTotal").textContent=euro(state.shopping.reduce((s,x)=>s+x.price,0));
+ document.getElementById("shoppingList").innerHTML=groups.map(g=>{let arr=state.shopping.filter(x=>x.gang===g);if(!arr.length)return "";return `<div class="gang"><h3>${g}</h3><div>${arr.map(x=>`<div class="shopitem ${x.done?"done":""}" onclick="toggleShop('${x.name.replaceAll("'","\\'")}')"><div class="checkbox">${x.done?"✓":""}</div><span class="iname">${x.name}${x.count>1?` <small style="color:#999">für ${x.count} Gerichte</small>`:""}</span><span class="qty">${x.qty}</span><span class="shopprice">${euro(x.price)}</span></div>`).join("")}</div></div>`}).join("");
+ if(done===total&&total){document.getElementById("shoppingList").insertAdjacentHTML("afterbegin",`<div style="text-align:center;font-size:42px;padding:10px">🎉</div>`);bell()}
+ nav();
+}
+function toggleShop(name){let x=state.shopping.find(x=>x.name===name);if(x){x.done=!x.done;tick();renderShopping()}}
+function renderProfile(){document.getElementById("profileMarket").textContent=markets[state.market].n;document.getElementById("profileBudget").textContent=euro(state.budget);document.getElementById("profileLazy").textContent=lazy[state.lazy].e+" "+lazy[state.lazy].t}
+function nav(){
+ let n=`<div class="bottomnav"><button class="navbtn ${document.getElementById("week").classList.contains("active")?"active":""}" onclick="go('week')"><b>▦</b>Woche</button><button class="navbtn ${document.getElementById("shopping").classList.contains("active")?"active":""}" onclick="go('shopping')"><b>□<span class="badge">${state.shopping.filter(x=>!x.done).length}</span></b>Einkauf</button><button class="navbtn ${document.getElementById("profile").classList.contains("active")?"active":""}" onclick="go('profile')"><b>○</b>Profil</button></div>`;
+ ["navWeek","navShop","navProfile"].forEach(id=>{let el=document.getElementById(id);if(el)el.innerHTML=n})
+}
+function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),1900)}
+init();
+</script>
+</body>
+</html>
