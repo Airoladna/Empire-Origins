@@ -1,31 +1,16 @@
-# Miniwelt – Tamagotchi-Webspiel
+# LUMI – Deine kleine Welt
 
-Eine eigenständige, deutschsprachige Tamagotchi-inspirierte Web-App für GitHub Pages.
+## Veröffentlichung über GitHub Pages
+1. Lade `index.html`, `kevin_character.png`, `.nojekyll` und diese `README.md` direkt ins Hauptverzeichnis deines GitHub-Repositories.
+2. Bestätige das Ersetzen der alten `index.html`.
+3. Unter **Settings → Pages** die Quelle `Deploy from a branch`, Branch `main`, Ordner `/(root)` wählen.
+4. Öffne die bestehende GitHub-Pages-Adresse neu.
 
-## Enthalten
-- `index.html` – vollständiges Spiel (HTML, CSS und JavaScript)
-- `charakter.jpg` – lokale Charaktergrafik
+## Figuren-Update
+Die persönliche 3D-Spielwelt enthält jetzt zusätzlich den Avatar aus `kevin_character.png` als transparenten, zur Kamera ausgerichteten Charakter. Momo bleibt als eigener interaktiver Begleiter erhalten. Die Figurendatei muss im selben Ordner wie `index.html` liegen.
 
-## Direkt auf GitHub Pages veröffentlichen
-1. Erstelle ein neues GitHub-Repository.
-2. Lade `index.html` und `charakter.jpg` aus diesem Ordner ins Stammverzeichnis hoch.
-3. Öffne **Settings → Pages**.
-4. Unter **Build and deployment**: **Deploy from a branch** auswählen.
-5. Branch `main`, Ordner `/ (root)` wählen und speichern.
-6. Nach dem Deployment zeigt GitHub Pages die URL deines Spiels an.
-
-Alternativ kannst du den Inhalt dieses ZIPs vollständig ins Repository entpacken und hochladen.
-
-## Spielstand
-Der Spielstand wird mit `localStorage` lokal im Browser gespeichert. Es gibt keine Anmeldung und keinen Server. Ein Spielstand wird nicht automatisch zwischen Geräten synchronisiert. Der Charakter und alle anderen Assets liegen lokal im Repository, daher funktioniert das Spiel ohne externe Bild- oder Script-CDNs.
-
-## Bedienung
-- **Füttern, Spielen, Waschen, Schlafen, Leckerli, Aufräumen**: Bedürfnisse pflegen.
-- **Tagesgeschenk**: einmal pro Kalendertag Münzen abholen.
-- **Laden**: Deko kaufen.
-- **Sammlung**: gekaufte Gegenstände aufstellen.
-- **Tagebuch**: gemeinsame Erlebnisse ansehen.
-- **Einstellungen**: Namen ändern oder einen neuen Spielstand beginnen.
-
-## Technischer Hinweis
-Statische Website ohne Build-Schritt: kein npm, keine API-Schlüssel, kein Backend.
+## Hinweise
+- Einzelspieler, keine Anmeldung und kein eigener Server.
+- Der Spielstand wird lokal im Browser gespeichert.
+- Three.js wird von jsDelivr geladen; für den 3D-Modus ist daher eine Internetverbindung nötig.
+- Vor dem Austausch der Version empfiehlt es sich, einen Spielstand über **Optionen → Spielstand exportieren** zu sichern.
